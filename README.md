@@ -6,4 +6,4 @@ La primera vez ejecutar los sgtes dos comandos en orden:
 cmake --fresh
 cmake --build "$PWD"
 
-y siempre escribir en la terminal ./my_sh+
+y siempre escribir en la terminal ./my_sh
