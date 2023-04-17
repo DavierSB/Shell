@@ -4,8 +4,9 @@
 #include<unistd.h>
 #include <sys/types.h>
 #include<sys/wait.h>
+#include<orden.h>
 void Loop();
-char *ReadLine();
+void ReadLine();
 char **Split(char*);
 //Espero q GetCommands devuelva un arreglo NULL terminated
 
@@ -25,7 +26,8 @@ void Loop()
     do
     {
         printf("ourshell $ ");
-        line = ReadLine();
+        char* line = NULL;
+        ReadLine(line);
         args = Split(line);
         status = Execute(args);
         free(line);
@@ -33,12 +35,10 @@ void Loop()
     }while(status);
 }
 
-char *ReadLine()
+void ReadLine(char* line)
 {
-    char *line = NULL;
     ssize_t sz = 0;
-    getline(&line, &sz, stdin);
-    return line;
+    getline(line, &sz, stdin);
 }
 
 char** Split (char* input)
@@ -57,7 +57,24 @@ char** Split (char* input)
 return result;
 }
 
+void Parsear(Orden *A[], int* results)
+{
+    char* args[] = {"ls", 0};
+    A[0] = orden_new(args[0], args);
+}
+
 int Execute(char* args[])
 {
+    //Parser parser = new Parser(args);
+    int *results;//Resultado de las ejecuciones
+    Orden* ordenes[1];
+    /*Parser.*/Parsear(ordenes, results);
+    do
+    {
+        for(int i = 0; ordenes[i] != NULL; i++)
+           Ejecutar(ordenes[i], results);
+        /*Parser.*/Parsear(ordenes, results);
+        ordenes[0] = NULL;//Para salir del ciclo xd
+    }while(ordenes[0] != NULL);
     return 0;
 }
