@@ -35,12 +35,6 @@ void Loop()
     }while(status);
 }
 
-void ReadLine(char* line)
-{
-    ssize_t sz = 0;
-    getline(line, &sz, stdin);
-}
-
 char** Split (char* input)
 {
     char** result = NULL;
