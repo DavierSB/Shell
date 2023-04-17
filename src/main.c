@@ -1,12 +1,14 @@
 #include <glib.h>
+#include <orden.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include<unistd.h>
 #include <sys/types.h>
-#include<sys/wait.h>
-#include<orden.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 void Loop();
-void ReadLine();
 char **Split(char*);
 //Espero q GetCommands devuelva un arreglo NULL terminated
 
@@ -25,9 +27,7 @@ void Loop()
     int status;
     do
     {
-        printf("ourshell $ ");
-        char* line = NULL;
-        ReadLine(line);
+        line = readline ("ourshell~$ ");
         args = Split(line);
         status = Execute(args);
         free(line);
