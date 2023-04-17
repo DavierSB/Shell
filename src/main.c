@@ -6,7 +6,7 @@
 #include<sys/wait.h>
 void Loop();
 char *ReadLine();
-char **GetCommands(char*);
+char **Split(char*);
 //Espero q GetCommands devuelva un arreglo NULL terminated
 
 int Execute(char **);
@@ -26,7 +26,7 @@ void Loop()
     {
         printf("ourshell $ ");
         line = ReadLine();
-        args = GetCommands(line);
+        args = Split(line);
         status = Execute(args);
         free(line);
         free(args);
@@ -41,7 +41,7 @@ char *ReadLine()
     return line;
 }
 
-char** GetCommands (char* input)
+char** Split (char* input)
 {
     char** result = NULL;
 
@@ -53,33 +53,11 @@ char** GetCommands (char* input)
     else
     {
         result = g_strsplit_set (input, " ", -1);
-
-        int i;
-        for (i = 0; result [i]; i++)
-            {
-                g_print ("token [i] = '%s'\n", result [i]);
-            }
     }
 return result;
 }
 
 int Execute(char* args[])
 {
-    int i, status = 1;
-    /* no pongas for (unsigned int i = 0; ...) porque muchos compiladores no lo soportan    */
-    /* eso en C++ es estandar pero en C demor\'o bastante en serlo                          */
-    for (i = 0; status && args[i] != NULL; i++)
-    {
-        pid_t child_pid = fork();
-        if (child_pid == 0)
-        {
-            //Ejecutar el comando
-            printf("Ejecutando: %s \n", args[i]);
-        }else{
-            waitpid(child_pid, &status, 0);
-            //Aqui puedo perfectamente en lugar d esperar q se termine de ejecutar
-            //el proceso hijo, llamar otros procesos mientras espero y asi correrlos
-            //en paralelo y moverlos d background a foreground y todo eso
-        }
-    }
+    return 0;
 }
