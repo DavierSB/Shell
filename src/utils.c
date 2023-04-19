@@ -1,9 +1,16 @@
 #include<glib.h>
 #include "readline/readline.h"
 #include "utils.h"
+void Actualizar_Historia(char* line)
+{
+
+}
 char *ReadLine()
 {
-    return readline ("ourshell~$ ");
+    char* line = readline ("ourshell~$ ");
+    //m dices q podemos actualizar la historia d esta manera porq es global en readline
+    Actualizar_Historia(line);
+    return line;
 }
 char** Split (char* input)
 {

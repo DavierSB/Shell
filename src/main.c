@@ -6,6 +6,8 @@ void Loop();
 
 int main()
 {
+    //Init_Variables();
+    //Init_BackGroung();
     Loop();
     return 0;
 }
