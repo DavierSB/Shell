@@ -59,5 +59,9 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     {
         //Q hago aqui?
     }
+    int index_d_inicio = index;
+    for(; EsBuiltIn(tokens[index]) == 0; index++);
+    current_command->index_of_termination = index;
+    current_command->parameters = SubArray(tokens, index_d_inicio, index);
     return Parsear(Command_new(), current_command, tokens, index);
 }
