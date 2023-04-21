@@ -6,13 +6,12 @@
 #include "command.h"
 #include "parser.h"
 void Loop();
-int killer();
 
 int main()
 {
     //Init_Variables();
     //Init_BackGroung();
-    signal(SIGINT, &killer);
+    //signal(SIGINT, &killer);
     Loop();
     return 0;
 }
