@@ -2,6 +2,7 @@
 #include<command.h>
 #include<string.h>
 #include<glib.h>
+
 int Concatenation_Command(char ** tokens, int index)
 {
     return ((strcmp(tokens[index], "&&") == 0) || (strcmp(tokens[index], "||") == 0) || (strcmp(tokens[index], ";") == 0) || (strcmp(tokens[index], "|") == 0));
@@ -14,12 +15,17 @@ void SubArray(char **tokens, char **nuevo, int inicio, int final)
 {
     nuevo = malloc(sizeof(char*)*(final - inicio));
     for (int i = inicio; i < final; i++)
-        nuevo[i - inicio] = tokens[i];
+        strcpy(nuevo[i - inicio], tokens[i]);
 }
 
 Command* Parsear(Command * current_command, Command * previous_command, char ** tokens, int index)
 {
-    current_command->instruction = tokens[index];
+    current_command->instruction = strdup(tokens[index]);
+    /*if(previous_command != NULL)
+    {
+        printf(previous_command->instruction);
+        return previous_command;
+    }*/
     if (tokens[index] == NULL)
     {
         if (previous_command != NULL)
@@ -32,6 +38,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     {
         current_command->previous = previous_command;
         current_command->next = Parsear(Command_new(), NULL, tokens, ++index);
+        //if((current_command->next) == NULL)printf("NULL Next");
         return current_command;
     }
     if (strcmp(tokens[index], "if") == 0)
@@ -57,14 +64,19 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
         return NULL;
     }
 
+    if(tokens[++index] == NULL)
+    {
+        return current_command;
+    }
+    
     if (strcmp(tokens[index], "<") == 0)
     {
-        current_command->file_in = tokens[++index];
+        strcpy(current_command->file_in, tokens[++index]);
         index++;
     }
     if (strcmp(tokens[index], ">") == 0)
     {
-        current_command->file_out = tokens[++index];
+        strcpy(current_command->file_out, tokens[++index]);
         index++;
     }
     if (strcmp(tokens[index], ">>") == 0)
@@ -72,8 +84,9 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
         //Q hago aqui?
     }
     int index_d_inicio = index;
-    for(int HayComillas = 0; EsBuiltIn(tokens, index) == 0; index++);
+    for(; EsBuiltIn(tokens, index) == 0; index++);
     current_command->index_of_termination = index;
     SubArray(tokens, current_command->parameters, index_d_inicio, index);
     return Parsear(Command_new(), current_command, tokens, index);
+    //return current_command;
 }

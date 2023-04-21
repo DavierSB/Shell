@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <command.h>
 
 Command* Command_new ()
@@ -25,18 +26,27 @@ void Command_unref (Command* self)
     }
 }
 
+int IsConcatenation(char *inst)
+{
+        return ((strcmp(inst, "&&") == 0) || (strcmp(inst, "||") == 0) || (strcmp(inst, ";") == 0) || (strcmp(inst, "|") == 0));
+}
 void Mostrar(Command *command, int espacios)
 {
+  if (command == NULL)return;
   for (int i = 0; i < espacios; i++)
     printf(" ");
   printf("%s", command->instruction);
+  printf("\n");
   if(command->instruction == "if")
   {
-    Mostrar(command->if_cond, espacios + 1);
-    Mostrar(command->if_then, espacios + 1);
-    Mostrar(command->if_else, espacios + 1);
-  }else{
-    if(command->previous != NULL)Mostrar(command->previous, espacios + 1);
-    if(command->next != NULL)Mostrar(command->next, espacios + 1);
+    Mostrar(command->if_cond, espacios + 2);
+    Mostrar(command->if_then, espacios + 2);
+    Mostrar(command->if_else, espacios + 2);
+    return;
+  }
+  if (IsConcatenation(command->instruction))
+  {
+    if(command->previous != NULL)Mostrar(command->previous, espacios + 2);
+    if(command->next != NULL)Mostrar(command->next, espacios + 2);
   }
 }
