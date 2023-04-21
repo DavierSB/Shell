@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <command.h>
 
 Command* Command_new ()
@@ -7,12 +8,6 @@ Command* Command_new ()
 
   self = malloc (sizeof (Command));
   self->ref_count = 1;
-  
-  self->if_cond = malloc (sizeof (Command));
-  self->if_else = malloc (sizeof (Command));
-  self->if_then = malloc (sizeof (Command));
-  self->previous = malloc(sizeof(Command));
-  self->next = malloc (sizeof (Command));
   return self;
 }
 
@@ -28,4 +23,20 @@ void Command_unref (Command* self)
     {
       free (self);
     }
+}
+
+void Mostrar(Command *command, int espacios)
+{
+  for (int i = 0; i < espacios; i++)
+    printf(" ");
+  printf("%s", command->instruction);
+  if(command->instruction == "if")
+  {
+    Mostrar(command->if_cond, espacios + 1);
+    Mostrar(command->if_then, espacios + 1);
+    Mostrar(command->if_else, espacios + 1);
+  }else{
+    if(command->previous != NULL)Mostrar(command->previous, espacios + 1);
+    if(command->next != NULL)Mostrar(command->next, espacios + 1);
+  }
 }

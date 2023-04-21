@@ -2,6 +2,6 @@
 #define PARSER_H
 #include <command.h>
 
-int Parsear(Command *, Command *, char **, int);
+Command* Parsear(Command *, Command *, char **, int);
 
 #endif

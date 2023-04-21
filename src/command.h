@@ -1,19 +1,22 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-typedef struct
+typedef struct Command
 {
   int ref_count;
   char* instruction;
-  char* parameters;
-  int Fd_int;
-  int Fd_out;
+  char** parameters;
+  char* file_in;
+  char* file_out;
   int index_of_termination;
-  Command* next;
-  Command* previous;
-  Command* if_cond;
-  Command* if_then;
-  Command* if_else;
+  struct Command* next;
+  struct Command* previous;
+  struct Command* if_cond;
+  struct Command* if_then;
+  struct Command* if_else;
 } Command;
+
+Command *Command_new();
+void Mostrar(Command*, int);
 
 #endif

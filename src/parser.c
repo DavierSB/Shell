@@ -1,8 +1,20 @@
 #include<stdlib.h>
 #include<command.h>
+#include<string.h>
+#include<glib.h>
 int Concatenation_Command(char ** tokens, int index)
 {
-    return ((strcmp(tokens[index], "&&") == 0) || (strcmp(tokens[index], "||") == 0) || (strcmp(tokens[index], ";") == 0));
+    return ((strcmp(tokens[index], "&&") == 0) || (strcmp(tokens[index], "||") == 0) || (strcmp(tokens[index], ";") == 0) || (strcmp(tokens[index], "|") == 0));
+}
+int EsBuiltIn(char **tokens, int index)
+{
+    return Concatenation_Command(tokens, index) || (strcmp(tokens[index], "then") == 0) || (strcmp(tokens[index], "else") == 0) || (strcmp(tokens[index], "end") == 0);
+}
+void SubArray(char **tokens, char **nuevo, int inicio, int final)
+{
+    nuevo = malloc(sizeof(char*)*(final - inicio));
+    for (int i = inicio; i < final; i++)
+        nuevo[i - inicio] = tokens[i];
 }
 
 Command* Parsear(Command * current_command, Command * previous_command, char ** tokens, int index)
@@ -47,12 +59,12 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
 
     if (strcmp(tokens[index], "<") == 0)
     {
-        current_command->Fd_int = Get_File_Descriptor(tokens[++index]);
+        current_command->file_in = tokens[++index];
         index++;
     }
     if (strcmp(tokens[index], ">") == 0)
     {
-        current_command->Fd_out = Get_File_Descriptor(tokens[++index]);
+        current_command->file_out = tokens[++index];
         index++;
     }
     if (strcmp(tokens[index], ">>") == 0)
@@ -60,8 +72,8 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
         //Q hago aqui?
     }
     int index_d_inicio = index;
-    for(; EsBuiltIn(tokens[index]) == 0; index++);
+    for(int HayComillas = 0; EsBuiltIn(tokens, index) == 0; index++);
     current_command->index_of_termination = index;
-    current_command->parameters = SubArray(tokens, index_d_inicio, index);
+    SubArray(tokens, current_command->parameters, index_d_inicio, index);
     return Parsear(Command_new(), current_command, tokens, index);
 }

@@ -1,6 +1,7 @@
 #ifndef EXECUTE_H
 #define EXECUTE_H
+#include<command.h>
 
-int Execute(char **);
+int Execute(Command *);
 
 #endif

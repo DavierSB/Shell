@@ -9,7 +9,7 @@ char *ReadLine()
 {
     char* line = readline ("ourshell~$ ");
     //m dices q podemos actualizar la historia d esta manera porq es global en readline
-    Actualizar_Historia(line);
+    //Actualizar_Historia(line);
     return line;
 }
 char** Split (char* input)
