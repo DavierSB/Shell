@@ -69,21 +69,27 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     {
         return current_command;
     }
-    
+
     if (strcmp(tokens[index], "<") == 0)
     {
-        strcpy(current_command->file_in, tokens[++index]);
+        current_command->file_in = strdup(tokens[++index]);
         index++;
     }
+    if (tokens[index] == NULL)return current_command;
+    
     if (strcmp(tokens[index], ">") == 0)
     {
-        strcpy(current_command->file_out, tokens[++index]);
+        current_command->file_out = strdup(tokens[++index]);
         index++;
     }
+    if (tokens[index] == NULL)return current_command;
+    
     if (strcmp(tokens[index], ">>") == 0)
     {
         //Q hago aqui?
     }
+    if (tokens[index] == NULL)return current_command;
+    
     int index_d_inicio = index;
     for(; EsBuiltIn(tokens, index) == 0; index++);
     current_command->index_of_termination = index;

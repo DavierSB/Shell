@@ -10,6 +10,8 @@ Command* Command_new ()
   self = malloc (sizeof (Command));
   self->ref_count = 1;
   self->parameters = NULL;
+  self->file_in = NULL;
+  self->file_out = NULL;
   return self;
 }
 
@@ -40,6 +42,13 @@ void Mostrar_Parametros(Command* command)
     printf(")");
   }
 }
+void Mostrar_In_Out(Command* command)
+{
+  if (command->file_out != NULL)
+    printf(" > %s", command->file_out);
+  if (command->file_in != NULL)
+    printf(" < %s", command->file_in);
+}
 void Mostrar(Command *command, int espacios)
 {
   if (command == NULL)return;
@@ -47,6 +56,7 @@ void Mostrar(Command *command, int espacios)
     printf(" ");
   printf("%s", command->instruction);
   Mostrar_Parametros(command);
+  Mostrar_In_Out(command);
   printf("\n");
   if(strcmp(command->instruction, "if") == 0)
   {
