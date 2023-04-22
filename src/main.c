@@ -25,7 +25,7 @@ int main()
 
 void Loop()
 {
-    char *line, *aux;
+    char *line;
     char **tokens, **chunks;
     Command *comando;
     int status = 1;
@@ -38,7 +38,6 @@ void Loop()
             tokens = Split(chunks[i]);
             comando = Parsear(Command_new(), NULL, tokens, 0);
             status = Execute(comando);
-            //free(aux);
             free(tokens);
             free(comando);
         }

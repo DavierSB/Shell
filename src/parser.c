@@ -34,6 +34,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     {
         current_command->previous = previous_command;
         current_command->next = Parsear(Command_new(), NULL, tokens, ++index);
+        current_command->index_of_termination = (current_command->next)->index_of_termination;
         return current_command;
     }
     if (strcmp(tokens[index], "if") == 0)
@@ -52,7 +53,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
         }
         if(strcmp(tokens[index], "end") == 0)
         {
-            current_command->index_of_termination = index;
+            current_command->index_of_termination = index + 1;
             return current_command;
         }
         //Lanzar_Error If mal escrito
@@ -82,6 +83,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     for(; EsBuiltIn(tokens, index) == 0; index++);
     current_command->index_of_termination = index;
     SubArray(tokens, current_command->parameters, index_d_inicio, index);
+    if (!Concatenation_Command(tokens, index))
+        return current_command;
     return Parsear(Command_new(), current_command, tokens, index);
-    //*/return current_command;
 }

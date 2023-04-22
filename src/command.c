@@ -37,7 +37,7 @@ void Mostrar(Command *command, int espacios)
     printf(" ");
   printf("%s", command->instruction);
   printf("\n");
-  if(command->instruction == "if")
+  if(strcmp(command->instruction, "if") == 0)
   {
     Mostrar(command->if_cond, espacios + 2);
     Mostrar(command->if_then, espacios + 2);
