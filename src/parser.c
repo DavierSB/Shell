@@ -5,18 +5,21 @@
 
 int Concatenation_Command(char ** tokens, int index)
 {
+    if (tokens[index] == NULL)return 0;
     return ((strcmp(tokens[index], "&&") == 0) || (strcmp(tokens[index], "||") == 0) || (strcmp(tokens[index], "|") == 0));
 }
 int EsBuiltIn(char **tokens, int index)
 {
-    if (tokens[index] != NULL)return 1;
+    if (tokens[index] == NULL)return 1;
     return Concatenation_Command(tokens, index) || (strcmp(tokens[index], "then") == 0) || (strcmp(tokens[index], "else") == 0) || (strcmp(tokens[index], "end") == 0);
 }
-void SubArray(char **tokens, char **nuevo, int inicio, int final)
+char** SubArray(char **tokens, char **nuevo, int inicio, int final)
 {
-    nuevo = malloc(sizeof(char*)*(final - inicio));
+    nuevo = malloc(sizeof(char*)*(final - inicio + 1));
     for (int i = inicio; i < final; i++)
-        strcpy(nuevo[i - inicio], tokens[i]);
+        nuevo[i - inicio] = strdup(tokens[i]);
+    nuevo[final - inicio] = NULL;
+    return nuevo;
 }
 
 Command* Parsear(Command * current_command, Command * previous_command, char ** tokens, int index)
@@ -53,6 +56,8 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
         }
         if(strcmp(tokens[index], "end") == 0)
         {
+            //for (int i = 0; current_command->parameters[i] != NULL; i++, printf(", "))
+                //printf(current_command->parameters[i]);
             current_command->index_of_termination = index + 1;
             return current_command;
         }
@@ -82,7 +87,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     int index_d_inicio = index;
     for(; EsBuiltIn(tokens, index) == 0; index++);
     current_command->index_of_termination = index;
-    SubArray(tokens, current_command->parameters, index_d_inicio, index);
+    current_command->parameters = SubArray(tokens, current_command->parameters, index_d_inicio, index);
     if (!Concatenation_Command(tokens, index))
         return current_command;
     return Parsear(Command_new(), current_command, tokens, index);

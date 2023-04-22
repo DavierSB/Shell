@@ -9,6 +9,7 @@ Command* Command_new ()
 
   self = malloc (sizeof (Command));
   self->ref_count = 1;
+  self->parameters = NULL;
   return self;
 }
 
@@ -30,12 +31,22 @@ int IsConcatenation(char *inst)
 {
         return ((strcmp(inst, "&&") == 0) || (strcmp(inst, "||") == 0) || (strcmp(inst, ";") == 0) || (strcmp(inst, "|") == 0));
 }
+void Mostrar_Parametros(Command* command)
+{
+  if (command->parameters != NULL){
+    printf("( ");
+    for (int i = 0; command->parameters[i] != NULL; i++, printf(", "))
+      printf(command->parameters[i]);
+    printf(")");
+  }
+}
 void Mostrar(Command *command, int espacios)
 {
   if (command == NULL)return;
   for (int i = 0; i < espacios; i++)
     printf(" ");
   printf("%s", command->instruction);
+  Mostrar_Parametros(command);
   printf("\n");
   if(strcmp(command->instruction, "if") == 0)
   {
