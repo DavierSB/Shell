@@ -5,10 +5,11 @@
 
 int Concatenation_Command(char ** tokens, int index)
 {
-    return ((strcmp(tokens[index], "&&") == 0) || (strcmp(tokens[index], "||") == 0) || (strcmp(tokens[index], ";") == 0) || (strcmp(tokens[index], "|") == 0));
+    return ((strcmp(tokens[index], "&&") == 0) || (strcmp(tokens[index], "||") == 0) || (strcmp(tokens[index], "|") == 0));
 }
 int EsBuiltIn(char **tokens, int index)
 {
+    if (tokens[index] != NULL)return 1;
     return Concatenation_Command(tokens, index) || (strcmp(tokens[index], "then") == 0) || (strcmp(tokens[index], "else") == 0) || (strcmp(tokens[index], "end") == 0);
 }
 void SubArray(char **tokens, char **nuevo, int inicio, int final)
@@ -20,12 +21,6 @@ void SubArray(char **tokens, char **nuevo, int inicio, int final)
 
 Command* Parsear(Command * current_command, Command * previous_command, char ** tokens, int index)
 {
-    current_command->instruction = strdup(tokens[index]);
-    /*if(previous_command != NULL)
-    {
-        printf(previous_command->instruction);
-        return previous_command;
-    }*/
     if (tokens[index] == NULL)
     {
         if (previous_command != NULL)
@@ -34,11 +29,11 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
         }
         return current_command;
     }
+    current_command->instruction = strdup(tokens[index]);
     if (Concatenation_Command(tokens, index))
     {
         current_command->previous = previous_command;
         current_command->next = Parsear(Command_new(), NULL, tokens, ++index);
-        //if((current_command->next) == NULL)printf("NULL Next");
         return current_command;
     }
     if (strcmp(tokens[index], "if") == 0)
@@ -88,5 +83,5 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     current_command->index_of_termination = index;
     SubArray(tokens, current_command->parameters, index_d_inicio, index);
     return Parsear(Command_new(), current_command, tokens, index);
-    //return current_command;
+    //*/return current_command;
 }

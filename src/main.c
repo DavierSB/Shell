@@ -7,6 +7,13 @@
 #include "parser.h"
 void Loop();
 
+int Size(char** arr)
+{
+    int count = 0;
+    for(; arr[count] != NULL; count++);
+    return count;
+}
+
 int main()
 {
     //Init_Variables();
@@ -19,16 +26,21 @@ int main()
 void Loop()
 {
     char *line;
-    char **tokens;
+    char **tokens, **chunks;
     Command *comando;
-    int status;
+    int status = 1;
     do
     {
         line = ReadLine();
-        tokens = Split(line);
-        comando = Parsear(Command_new(), NULL, tokens, 0);
-        status = Execute(comando);
+        chunks = Split(line, ";");
+        for (int i = 0; chunks[i] != NULL; i++)
+        {
+            tokens = Split(chunks[i], " \t\r\n\a");
+            comando = Parsear(Command_new(), NULL, tokens, 0);
+            status = Execute(comando);
+            free(tokens);
+            free(comando);
+        }
         free(line);
-        free(tokens);
     }while(status);
 }

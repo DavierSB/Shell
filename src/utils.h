@@ -2,6 +2,6 @@
 #define UTILS_H
 
 char *ReadLine();
-char **Split(char*);
+char **Split(char*, char*);
 
 #endif

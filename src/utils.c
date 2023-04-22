@@ -12,7 +12,7 @@ char *ReadLine()
     //Actualizar_Historia(line);
     return line;
 }
-char** Split (char* input)
+char** Split (char* input, char* separadores)
 {
     char** result = NULL;
 
@@ -23,7 +23,7 @@ char** Split (char* input)
     }
     else
     {
-        result = g_strsplit_set (input, " \t\r\n\a", -1);
+        result = g_strsplit_set (input, separadores, -1);
         //for (int i = 0; result[i] != NULL; i++, printf("\n"))
         //    printf(result[i]);
     }
