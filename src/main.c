@@ -25,19 +25,20 @@ int main()
 
 void Loop()
 {
-    char *line;
+    char *line, *aux;
     char **tokens, **chunks;
     Command *comando;
     int status = 1;
     do
     {
         line = ReadLine();
-        chunks = Split(line, ";");
+        chunks = Separar_Puntos_Comas(line, chunks);
         for (int i = 0; chunks[i] != NULL; i++)
         {
-            tokens = Split(chunks[i], " \t\r\n\a");
+            tokens = Split(chunks[i]);
             comando = Parsear(Command_new(), NULL, tokens, 0);
             status = Execute(comando);
+            //free(aux);
             free(tokens);
             free(comando);
         }
