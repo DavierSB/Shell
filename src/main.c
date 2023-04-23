@@ -1,5 +1,7 @@
 #include<stdlib.h>
 #include<signal.h>
+#include<fcntl.h>
+#include<unistd.h>
 #include "readline/readline.h"
 #include "utils.h"
 #include "execute.h"
@@ -42,5 +44,5 @@ void Loop()
             free(comando);
         }
         free(line);
-    }while(status);
+    }while(!status);
 }

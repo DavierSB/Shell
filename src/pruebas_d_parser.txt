@@ -3,3 +3,7 @@ if 1 then if 2 then 3 else if 4 then 5 else 6 end end else if 7 then 8 else 9 en
 if yo then tu else ella end ; m | n | j && k
 
 if if yo a b c then if tu d e f then g else h && i end else j | k l m n end else if o p then q r else s end end
+
+if yo < a && tu > b || if c then d < e f else g | h end then i < j > k else l < m n o p end
+
+if false then exit else if cd /home/davier/MLB then ls > /home/davier/Apuntes/apuntes.txt else exit end end

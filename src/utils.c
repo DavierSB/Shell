@@ -1,3 +1,5 @@
+#include<stdio.h>
+#include<unistd.h>
 #include<glib.h>
 #include "readline/readline.h"
 #include "utils.h"
@@ -7,7 +9,10 @@ void Actualizar_Historia(char* line)
 }
 char *ReadLine()
 {
-    char* line = readline ("ourshell~$ ");
+    char directorio[100];
+    printf("ourshell:");
+    printf("%s", getcwd(directorio, 100));
+    char* line = readline ("$ ");
     //m dices q podemos actualizar la historia d esta manera porq es global en readline
     //Actualizar_Historia(line);
     return line;
