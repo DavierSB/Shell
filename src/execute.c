@@ -46,11 +46,21 @@ int Execute(Command *command)
         if (command->parameters != NULL)
         {
             args = malloc(sizeof(char *) + sizeof(command->parameters));
-            for (int i = 0; command->parameters[i] != NULL; i++)
-                args[i + 1] = command->parameters[i];
+            for (int i = 0; ; i++)
+            {
+                if (command->parameters[i] != NULL)args[i + 1] = strdup(command->parameters[i]);
+                else
+                {
+                    args[i + 1] = NULL;
+                    break;
+                }           
+            }
         }
         else
-            args = malloc(sizeof(char *));
+        {
+            args = malloc(sizeof(char *)*2);
+            args[1] = NULL;
+        }
         args[0] = strdup(command->instruction);
         return execvp(command->instruction, args);
     }
