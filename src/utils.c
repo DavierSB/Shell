@@ -7,15 +7,34 @@ void Actualizar_Historia(char* line)
 {
 
 }
+char *Eliminar_Comentarios(char* line, char* pure_line)
+{
+    for (int i = 0; ; i++)
+    {
+        if(line[i] == NULL)
+            return line;
+        if(line[i] == '#')
+        {
+            do{i--;}while(line[i] == ' ');
+            i++;
+            pure_line = malloc(sizeof(char*)*i);
+            for (int j = 0; j < i; j++)
+                pure_line[j] = line[j];
+            pure_line[i] = NULL;
+            return pure_line;
+        }
+    }
+}
 char *ReadLine()
 {
     char directorio[100];
     printf("ourshell:");
     printf("%s", getcwd(directorio, 100));
     char* line = readline ("$ ");
+    char* pure_line;
     //m dices q podemos actualizar la historia d esta manera porq es global en readline
     //Actualizar_Historia(line);
-    return line;
+    return Eliminar_Comentarios(line, pure_line);
 }
 char** Split (char* input)
 {
