@@ -7,3 +7,5 @@ if if yo a b c then if tu d e f then g else h && i end else j | k l m n end else
 if yo < a && tu > b || if c then d < e f else g | h end then i < j > k else l < m n o p end
 
 if false then exit else if cd /home/davier/MLB then ls > /home/davier/Apuntes/apuntes.txt else exit end end
+
+ls -l | head | tail -4 | grep Txt
