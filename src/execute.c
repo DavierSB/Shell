@@ -53,7 +53,7 @@ int Execute(Command *command)
                 {
                     args[i + 1] = NULL;
                     break;
-                }           
+                }
             }
         }
         else

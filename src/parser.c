@@ -11,7 +11,7 @@ int Concatenation_Command(char ** tokens, int index)
 int EsBuiltIn(char **tokens, int index)
 {
     if (tokens[index] == NULL)return 1;
-    return Concatenation_Command(tokens, index) || (strcmp(tokens[index], "then") == 0) || (strcmp(tokens[index], "else") == 0) || (strcmp(tokens[index], "end") == 0);
+    return Concatenation_Command(tokens, index) || (strcmp(tokens[index], "then") == 0) || (strcmp(tokens[index], "else") == 0) || (strcmp(tokens[index], "end") == 0) || (strcmp(tokens[index], "<") == 0) || (strcmp(tokens[index], ">") == 0) || (strcmp(tokens[index], ">>") == 0);
 }
 char** SubArray(char **tokens, char **nuevo, int inicio, int final)
 {
@@ -69,6 +69,11 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     {
         return current_command;
     }
+    
+    int index_d_inicio = index;
+    for(; EsBuiltIn(tokens, index) == 0; index++);
+    current_command->parameters = SubArray(tokens, current_command->parameters, index_d_inicio, index);
+    if (tokens[index] == NULL)return current_command;
 
     if (strcmp(tokens[index], "<") == 0)
     {
@@ -90,10 +95,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     }
     if (tokens[index] == NULL)return current_command;
     
-    int index_d_inicio = index;
-    for(; EsBuiltIn(tokens, index) == 0; index++);
     current_command->index_of_termination = index;
-    current_command->parameters = SubArray(tokens, current_command->parameters, index_d_inicio, index);
     if (!Concatenation_Command(tokens, index))
         return current_command;
     return Parsear(Command_new(), current_command, tokens, index);
