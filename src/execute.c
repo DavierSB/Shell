@@ -39,6 +39,7 @@ int Execute(Command *command)
         close(fd_out);
     }
     int pid = fork();
+    int status;
     if (pid == 0)
     {
         char **args;
@@ -52,10 +53,10 @@ int Execute(Command *command)
             args = malloc(sizeof(char *));
         args[0] = strdup(command->instruction);
         return execvp(command->instruction, args);
-        return 0;
     }
     else
     {
+        waitpid(pid, &status, 0);
         dup2(old_fd_in, 0);
         dup2(old_fd_out, 1);
         close(old_fd_in);
