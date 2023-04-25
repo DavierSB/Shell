@@ -12,6 +12,8 @@ Command* Command_new ()
   self->parameters = NULL;
   self->file_in = NULL;
   self->file_out = NULL;
+  self->fd_in = -1;
+  self->fd_out = -1;
   return self;
 }
 

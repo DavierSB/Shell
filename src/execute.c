@@ -4,7 +4,8 @@
 #include <fcntl.h>
 int Execute(Command *command)
 {
-    // Mostrar(command, 0);
+    int status;
+    //Mostrar(command, 0);
     if (strcmp(command->instruction, "exit") == 0)
         exit(EXIT_SUCCESS);
     if (strcmp(command->instruction, "true") == 0)
@@ -19,11 +20,25 @@ int Execute(Command *command)
             return Execute(command->if_else);
     }
     if (strcmp(command->instruction, "&&") == 0)
-        return Execute(command->previous) && Execute(command->next);
+        return (Execute(command->previous) == 0) && (Execute(command->next) == 0);
     if (strcmp(command->instruction, "||") == 0)
         return Execute(command->previous) || Execute(command->next);
     if (strcmp(command->instruction, "cd") == 0)
         return chdir(command->parameters[0]);
+    if (strcmp(command->instruction,"|") == 0)
+    {
+        int fdpipe[2];
+        pipe(fdpipe);
+        if (command->fd_in != -1)
+            command->previous->fd_in = command->fd_in;
+        command->previous->fd_out = fdpipe[1];
+        command->next->fd_in = fdpipe[0];
+        status = Execute(command->previous);
+        status = status || Execute(command->next);
+        close(fdpipe[0]);
+        close(fdpipe[1]);
+    }
+
     int old_fd_in = dup(0);
     int old_fd_out = dup(1);
     if (command->file_in != NULL)
@@ -32,14 +47,22 @@ int Execute(Command *command)
         dup2(fd_in, 0);
         close(fd_in);
     }
+    if (command->fd_in != -1)
+    {
+        dup2(command->fd_in, 0);
+        close(command->fd_in);
+    }
     if (command->file_out != NULL)
     {
         int fd_out = open(command->file_out, O_WRONLY);
         dup2(fd_out, 1);
         close(fd_out);
     }
+    if (command->fd_out != -1){
+        dup2(command->fd_out, 1);
+        close(command->fd_out);
+    }
     int pid = fork();
-    int status;
     if (pid == 0)
     {
         char **args;

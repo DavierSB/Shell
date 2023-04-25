@@ -8,6 +8,8 @@ typedef struct Command
   char** parameters;
   char* file_in;
   char* file_out;
+  int fd_in;
+  int fd_out;
   int index_of_termination;
   struct Command* next;
   struct Command* previous;
