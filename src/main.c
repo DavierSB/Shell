@@ -52,7 +52,7 @@ void Iniciar_History(GQueue *history)
 {
     char *line = NULL;
     size_t len = 0;
-    FILE *file = fopen("/home/davier/Apuntes/history.txt", "r");
+    FILE *file = fopen("./history.txt", "r");
     while ((getline(&line, &len, file)) != -1)
         g_queue_push_head(history, g_strdup(line));
     fclose(file);
