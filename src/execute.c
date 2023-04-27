@@ -2,7 +2,8 @@
 #include <command.h>
 #include <unistd.h>
 #include <fcntl.h>
-int Execute(Command *command)
+#include <glib.h>
+int Execute(Command *command, GQueue *history)
 {
     int status;
     //Mostrar(command, 0);
@@ -12,17 +13,23 @@ int Execute(Command *command)
         return 0;
     if (strcmp(command->instruction, "false") == 0)
         return 1;
+    if (strcmp(command->instruction, "history") == 0)
+    {
+        for (int i = 2; (i <= history->length) && (i <= 11); i++)
+            printf("\n %d %s", i - 1, g_strdup(g_queue_peek_nth(history, i - 1)));
+        printf("\n");
+    }
     if (strcmp(command->instruction, "if") == 0)
     {
-        if (!Execute(command->if_cond))
-            return Execute(command->if_then);
+        if (!Execute(command->if_cond, history))
+            return Execute(command->if_then, history);
         else
-            return Execute(command->if_else);
+            return Execute(command->if_else, history);
     }
     if (strcmp(command->instruction, "&&") == 0)
-        return (Execute(command->previous) == 0) && (Execute(command->next) == 0);
+        return (Execute(command->previous, history) == 0) && (Execute(command->next, history) == 0);
     if (strcmp(command->instruction, "||") == 0)
-        return Execute(command->previous) || Execute(command->next);
+        return Execute(command->previous, history) || Execute(command->next, history);
     if (strcmp(command->instruction, "cd") == 0)
         return chdir(command->parameters[0]);
     if (strcmp(command->instruction,"|") == 0)
@@ -33,8 +40,8 @@ int Execute(Command *command)
             command->previous->fd_in = command->fd_in;
         command->previous->fd_out = fdpipe[1];
         command->next->fd_in = fdpipe[0];
-        status = Execute(command->previous);
-        status = status || Execute(command->next);
+        status = Execute(command->previous, history);
+        status = status || Execute(command->next, history);
         close(fdpipe[0]);
         close(fdpipe[1]);
     }

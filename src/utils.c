@@ -3,38 +3,41 @@
 #include<glib.h>
 #include "readline/readline.h"
 #include "utils.h"
-void Actualizar_Historia(char* line)
-{
 
-}
-char *Eliminar_Comentarios(char* line, char* pure_line)
-{
-    for (int i = 0; ; i++)
-    {
-        if(line[i] == NULL)
-            return line;
-        if(line[i] == '#')
-        {
-            do{i--;}while(line[i] == ' ');
-            i++;
-            pure_line = malloc(sizeof(char*)*i);
-            for (int j = 0; j < i; j++)
-                pure_line[j] = line[j];
-            pure_line[i] = NULL;
-            return pure_line;
-        }
-    }
-}
-char *ReadLine()
+char *Eliminar_Comentarios(char*, char*);
+char *Unificar(char**, char*);
+int IsDigit(char*);
+char *ReadLine(GQueue* history)
 {
     char directorio[100];
     printf("ourshell:");
     printf("%s", getcwd(directorio, 100));
     char* line = readline ("$ ");
-    char* pure_line;
-    //m dices q podemos actualizar la historia d esta manera porq es global en readline
-    //Actualizar_Historia(line);
-    return Eliminar_Comentarios(line, pure_line);
+    char* pure_line = Eliminar_Comentarios(line, pure_line);
+    if (g_queue_is_empty(history))
+    {
+        g_queue_push_head(history, g_strdup(pure_line));
+        return pure_line;
+    }
+    char** chunks = Split(pure_line);
+    char *aux;
+    for (int i = 0, j; chunks[i] != NULL; i++)
+        if (strcmp(chunks[i], "again") == 0)
+        {
+            if ((chunks[i + 1] != NULL) && IsDigit(chunks[i + 1])){
+                chunks[i] = g_strdup(g_queue_peek_nth(history, chunks[i + 1][0] - '0' - 1));
+                for (j= i + 1; chunks[j + 1] != NULL; j++)
+                {
+                    chunks[j] = strdup(chunks[j + 1]);
+                }
+                chunks[j] = NULL;
+            }
+            else
+                chunks[i] = g_strdup(g_queue_peek_head(history));
+        }
+    char *history_line = Unificar(chunks, history_line);
+    g_queue_push_head(history, g_strdup(history_line));
+    return history_line;
 }
 char** Split (char* input)
 {
@@ -93,4 +96,37 @@ char** Separar_Puntos_Comas(char* line, char** answer)
         start = end;
         new = NULL;
     }
+}
+char *Eliminar_Comentarios(char* line, char* pure_line)
+{
+    for (int i = 0; ; i++)
+    {
+        if(line[i] == NULL)
+            return line;
+        if(line[i] == '#')
+        {
+            do{i--;}while(line[i] == ' ');
+            i++;
+            pure_line = malloc(sizeof(char*)*i);
+            for (int j = 0; j < i; j++)
+                pure_line[j] = line[j];
+            pure_line[i] = NULL;
+            return pure_line;
+        }
+    }
+}
+char *Unificar(char **chunks, char *line)
+{
+    line = strdup(chunks[0]);
+    for (int i = 1; chunks[i] != NULL; i++)
+    {
+        line = strcat(line, " ");
+        line = strcat(line, chunks[i]);
+    }
+    return line;
+}
+int IsDigit(char *line)
+{
+    if ((line[0] == '1') && (line[1] != NULL) && (line[1] == '0'))return 10;
+    return ((line[0] - '0') < 10) && (line[1] == NULL);
 }

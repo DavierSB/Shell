@@ -2,6 +2,6 @@
 #define EXECUTE_H
 #include<command.h>
 
-int Execute(Command *);
+int Execute(Command *, GQueue *);
 
 #endif
