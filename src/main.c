@@ -34,6 +34,7 @@ void Loop()
     do
     {
         line = ReadLine(history);
+        Guardar_History(history);
         chunks = Separar_Puntos_Comas(line, chunks);
         for (int i = 0; chunks[i] != NULL; i++)
         {
@@ -45,7 +46,6 @@ void Loop()
         }
         free(line);
     }while(!status);
-    Guardar_History(history);
 }
 
 void Iniciar_History(GQueue *history)
@@ -59,7 +59,13 @@ void Iniciar_History(GQueue *history)
 }
 void Guardar_History(GQueue *history)
 {
-    
+    FILE *file = fopen("./history.txt", "w");
+    for (int i = 0; i < history->length; i++)
+    {
+        fprintf(file, g_strdup(g_queue_peek_nth(history, i)));
+        fprintf(file, "\n");
+    }
+    fclose(file);
 }
 
 int Size(char** arr)
