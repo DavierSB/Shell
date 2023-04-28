@@ -9,3 +9,5 @@ if yo < a && tu > b || if c then d < e f else g | h end then i < j > k else l < 
 if false then exit else if cd /home/davier/MLB then ls > /home/davier/Apuntes/apuntes.txt else exit end end
 
 ls -l | head | tail -4 | grep Txt
+
+ls > /home/davier/Apuntes/apuntes.txt

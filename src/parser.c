@@ -84,6 +84,7 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     
     if (strcmp(tokens[index], ">") == 0)
     {
+        current_command->append = 0;
         current_command->file_out = strdup(tokens[++index]);
         index++;
     }
@@ -91,7 +92,9 @@ Command* Parsear(Command * current_command, Command * previous_command, char ** 
     
     if (strcmp(tokens[index], ">>") == 0)
     {
-        //Q hago aqui?
+        current_command->append = 1;
+        current_command->file_out = strdup(tokens[++index]);
+        index++;
     }
     if (tokens[index] == NULL)return current_command;
     

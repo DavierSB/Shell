@@ -14,6 +14,7 @@ char *ReadLine(GQueue* history)
     printf("%s", getcwd(directorio, 100));
     char* line = readline ("$ ");
     char* pure_line = Eliminar_Comentarios(line, pure_line);
+    return pure_line;
     if (g_queue_is_empty(history))
     {
         g_queue_push_head(history, g_strdup(pure_line));

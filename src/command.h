@@ -10,6 +10,7 @@ typedef struct Command
   char* file_out;
   int fd_in;
   int fd_out;
+  int append;
   int index_of_termination;
   struct Command* next;
   struct Command* previous;
