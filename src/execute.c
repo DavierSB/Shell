@@ -61,7 +61,10 @@ int Execute(Command *command, GQueue *history)
     }
     if (command->file_out != NULL)
     {
-        int fd_out = open(command->file_out, O_WRONLY);
+        int fd_out;
+        if (command->append)
+            fd_out = open(command->file_out, O_WRONLY | O_APPEND);
+        else fd_out = creat(command->file_out, 0644);
         dup2(fd_out, 1);
         close(fd_out);
     }
