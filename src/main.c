@@ -35,7 +35,7 @@ void Loop()
     do
     {
         line = ReadLine(history);
-        //Guardar_History(history);
+        Guardar_History(history);
         chunks = Separar_Puntos_Comas(line, chunks);
         for (int i = 0; chunks[i] != NULL; i++)
         {

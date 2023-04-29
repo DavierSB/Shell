@@ -1,13 +1,1 @@
-exit
-history
-exit
-history
 ls
-ls
-ls
-ls
-history
-history
-exit
-ls
-history
