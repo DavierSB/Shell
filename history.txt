@@ -1,1 +1,12 @@
-ls
+cd /home/davier/MLB
+history
+cd /home/davier/MLB
+exit
+cmake --build "$PWD"
+help multipipe
+help basic
+help basic
+grep Hola < /home/davier/Apuntes/apuntes.txt | grep soy | grep Davier
+history
+cd /home/davier/MLB
+help history

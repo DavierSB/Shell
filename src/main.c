@@ -15,11 +15,17 @@ int Size(char **);
 void Guardar_History(GQueue *);
 void Quitar_Salto_de_Linea(char *);
 
+int killer()
+{
+    signal(SIGINT, &killer);
+    printf("\n");
+    Loop();
+}
 int main()
 {
     //Init_Variables();
     //Init_BackGroung();
-    //signal(SIGINT, &killer);
+    signal(SIGINT, &killer);
     Loop();
     return 0;
 }

@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <glib.h>
+#include "help.h"
 int Execute(Command *command, GQueue *history)
 {
     int status;
@@ -13,6 +14,8 @@ int Execute(Command *command, GQueue *history)
         return 0;
     if (strcmp(command->instruction, "false") == 0)
         return 1;
+    if (strcmp(command->instruction, "help") == 0)
+        return Print_Help(command->parameters);
     if (strcmp(command->instruction, "history") == 0)
     {
         for (int i = 2; (i <= history->length) && (i <= 11); i++)

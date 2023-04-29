@@ -14,6 +14,7 @@ char *ReadLine(GQueue *history)
     printf("ourshell:");
     printf("%s", getcwd(directorio, 100));
     char *line = readline("$ ");
+    int Empieza_Con_Espacio = (line[0] == ' ');
     char *pure_line = Eliminar_Comentarios(line, pure_line);
     if (g_queue_is_empty(history))
     {
@@ -38,7 +39,8 @@ char *ReadLine(GQueue *history)
                 chunks[i] = g_strdup(g_queue_peek_head(history));
         }
     char *history_line = Unificar(chunks, history_line);
-    g_queue_push_head(history, g_strdup(history_line));
+    if(!Empieza_Con_Espacio)
+        g_queue_push_head(history, g_strdup(history_line));
     return history_line;
     //return pure_line;
 }
