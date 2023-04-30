@@ -30,9 +30,17 @@ int Execute(Command *command, GQueue *history)
             return Execute(command->if_else, history);
     }
     if (strcmp(command->instruction, "&&") == 0)
-        return (Execute(command->previous, history) == 0) && (Execute(command->next, history) == 0);
+    {
+        if(Execute(command->previous, history) == 0)
+            return Execute(command->next, history);
+        return 1;
+    }
     if (strcmp(command->instruction, "||") == 0)
-        return Execute(command->previous, history) || Execute(command->next, history);
+    {
+        if(Execute(command->previous, history) == 0)
+            return 0;
+        return Execute(command->next, history);
+    }
     if (strcmp(command->instruction, "cd") == 0)
         return chdir(command->parameters[0]);
     if (strcmp(command->instruction,"|") == 0)

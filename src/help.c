@@ -14,6 +14,7 @@ int Print_Help(char **funcionalidad)
         printf("multipipe\n");
         printf("history\n");
         //printf("ctrl + c\n");
+        printf("chain");
         printf("if\n");
         printf("multi-if\n");
         printf("help\n\n");
@@ -80,6 +81,18 @@ int Print_Help(char **funcionalidad)
         if(strcmp(s, "multi-if") == 0)
         {
             printf("Dentro de los campos if_cond, if_then o if_else los comandos apuntados pueden ser tambien if\n");
+        }
+        if(strcmp(s, "chain") == 0)
+        {
+            printf("La estructura command tiene campos de tipo command que indican el comando previo\n");
+            printf("y el posterior (previous y next). Asi las operaciones d encadenado como && o ||\n");
+            printf("pueden ser exresadas como comandos que toman por previous a la instruccion que esta\n");
+            printf("antes del operador y por next al que esta despues. Esto nos permite representar sin\n");
+            printf("mas parafernalia cadenas complejas de ands y ors de manera recursiva.\n");
+            printf("Para el caso de las concatenaciones (;) decidi separar los comandos que intervienen\n");
+            printf("en la concatenacion desde el mismo inicio en q la cadena es introducida, haciendo split\n");
+            printf("a ella. Esta decision la tome dado que el ; tiene mayor precedencia en la estructura\n");
+            printf("arborea con la q representamos los comandos\n");
         }
     }
     return 0;
